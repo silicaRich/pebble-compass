@@ -37,23 +37,18 @@ public class MainActivity extends ActionBarActivity implements SensorEventListen
     public void onSensorChanged(SensorEvent s){
     }
 
+    float[] accelerometerValues;
+    float[] magnetometerValues;
     @Override
     protected void onStart () {
        super.onStart();
-        //setContentView(R.layout.activity_main);
 
-        /*if (savedInstanceState == null) {
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.container, new PlaceholderFragment())
-                    .commit();
-        }
-*/
         // First, get an instance of the SensorManager
         SensorManager sMan = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
 
         // Second, get the sensors we're interested in
         Sensor magnetField = sMan.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
-     //   Sensor accelerometer = sMan.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        Sensor accelerometer = sMan.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
 
         // Third, implement a SensorEventListener class
        SensorEventListener magnetListener = new SensorEventListener(){
@@ -61,27 +56,38 @@ public class MainActivity extends ActionBarActivity implements SensorEventListen
                 // do things if you're interested in accuracy changes
             }
             public void onSensorChanged(SensorEvent event) {
-                // implement what you want to do here
+
+                //Setting up TextViews.
+                String s = "";
                 TextView view = (TextView)findViewById(R.id.asd);
-                view.setText("");
-                for (int i=0;i<event.values.length;i++)
-                {
-                   view.setText(String.format("%s\nValues[%d]:%s \n",
-                           view.getText(), //{0}
-                           i, //{1}
-                           event.values[i])//{2}
-                        );
+                //TextView view2 = (TextView)findViewById(R.id.accelerometer);
+                if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER)
+                    accelerometerValues = event.values;
+                else if (event.sensor.getType() ==  Sensor.TYPE_MAGNETIC_FIELD)
+                    magnetometerValues = event.values;
 
-                }      // Finally, register your listener
+                // Getting Values[] for Accelerometer, setting in TextView
 
+                if(accelerometerValues != null) {
+                    s += String.format("Accelerometer values(%d)\n", accelerometerValues.length);
+                    for (int i=0;i<accelerometerValues.length;i++)
+                        s += String.format("Accelerometer Values[%d]:%f\n", i, accelerometerValues[i]);
+                }
+                // Getting Values[] for Magnetometer, setting in TextView
+
+                if(magnetometerValues != null) {
+                    s += String.format("Magnetometer values(%d)\n", magnetometerValues.length);
+                    for (int i=0;i<magnetometerValues.length;i++)
+                        s+= String.format("Magnetometer Values[%d]:%f\n", i, magnetometerValues[i]);
+                }
+                view.setText(s);
             }
         };
+        sMan.registerListener(magnetListener, accelerometer, SensorManager.SENSOR_DELAY_NORMAL);
+
         sMan.registerListener(magnetListener, magnetField, SensorManager.SENSOR_DELAY_NORMAL);
 
     }
-
-
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
