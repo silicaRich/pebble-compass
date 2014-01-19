@@ -10,8 +10,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.os.Build;
+import android.hardware.*;
+import android.content.Context;
+import android.widget.TextView;
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends ActionBarActivity implements SensorEventListener {
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,7 +27,60 @@ public class MainActivity extends ActionBarActivity {
                     .add(R.id.container, new PlaceholderFragment())
                     .commit();
         }
+
     }
+
+    @Override
+    public void onAccuracyChanged(Sensor s, int i){
+    }
+    @Override
+    public void onSensorChanged(SensorEvent s){
+    }
+
+    @Override
+    protected void onStart () {
+       super.onStart();
+        //setContentView(R.layout.activity_main);
+
+        /*if (savedInstanceState == null) {
+            getSupportFragmentManager().beginTransaction()
+                    .add(R.id.container, new PlaceholderFragment())
+                    .commit();
+        }
+*/
+        // First, get an instance of the SensorManager
+        SensorManager sMan = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+
+        // Second, get the sensors we're interested in
+        Sensor magnetField = sMan.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
+     //   Sensor accelerometer = sMan.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+
+        // Third, implement a SensorEventListener class
+       SensorEventListener magnetListener = new SensorEventListener(){
+            public void onAccuracyChanged(Sensor sensor, int accuracy) {
+                // do things if you're interested in accuracy changes
+            }
+            public void onSensorChanged(SensorEvent event) {
+                // implement what you want to do here
+                TextView view = (TextView)findViewById(R.id.asd);
+                view.setText("");
+                for (int i=0;i<event.values.length;i++)
+                {
+                   view.setText(String.format("%s\nValues[%d]:%s \n",
+                           view.getText(), //{0}
+                           i, //{1}
+                           event.values[i])//{2}
+                        );
+
+                }      // Finally, register your listener
+
+            }
+        };
+        sMan.registerListener(magnetListener, magnetField, SensorManager.SENSOR_DELAY_NORMAL);
+
+    }
+
+
 
 
     @Override
@@ -61,5 +118,7 @@ public class MainActivity extends ActionBarActivity {
             return rootView;
         }
     }
+
+
 
 }
