@@ -9,25 +9,23 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.os.Build;
 import android.hardware.*;
 import android.content.Context;
 import android.widget.TextView;
+import android.widget.ImageView;
 
 public class MainActivity extends ActionBarActivity implements SensorEventListener {
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        ImageView compass = (ImageView) findViewById(R.id.compass_img);
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.container, new PlaceholderFragment())
                     .commit();
         }
-
     }
 
     @Override
@@ -55,43 +53,44 @@ public class MainActivity extends ActionBarActivity implements SensorEventListen
             public void onAccuracyChanged(Sensor sensor, int accuracy) {
                 // do things if you're interested in accuracy changes
             }
-            public void onSensorChanged(SensorEvent event) {
+           public void onSensorChanged(SensorEvent event) {
 
-                //Setting up TextViews.
-                String s = "";
-                TextView view = (TextView)findViewById(R.id.asd);
-                //TextView view2 = (TextView)findViewById(R.id.accelerometer);
-                if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER)
-                    accelerometerValues = event.values;
-                else if (event.sensor.getType() ==  Sensor.TYPE_MAGNETIC_FIELD)
-                    magnetometerValues = event.values;
+               //Setting up TextViews.
+               String magVals = "";
+               String accelVals = "";
+               TextView view = (TextView)findViewById(R.id.magnetometerTextView);
+               TextView view2 = (TextView)findViewById(R.id.accelerometerTextView);
 
-                // Getting Values[] for Accelerometer, setting in TextView
+               if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER)
+                   accelerometerValues = event.values;
+               else if (event.sensor.getType() ==  Sensor.TYPE_MAGNETIC_FIELD)
+                   magnetometerValues = event.values;
 
-                if(accelerometerValues != null) {
-                    s += String.format("Accelerometer values(%d)\n", accelerometerValues.length);
-                    for (int i=0;i<accelerometerValues.length;i++)
-                        s += String.format("Accelerometer Values[%d]:%f\n", i, accelerometerValues[i]);
-                }
-                // Getting Values[] for Magnetometer, setting in TextView
-
-                if(magnetometerValues != null) {
-                    s += String.format("Magnetometer values(%d)\n", magnetometerValues.length);
-                    for (int i=0;i<magnetometerValues.length;i++)
-                        s+= String.format("Magnetometer Values[%d]:%f\n", i, magnetometerValues[i]);
-                }
-                view.setText(s);
-            }
+               // Getting Values[] for Accelerometer, setting in TextView
+               if(accelerometerValues != null) {
+                   accelVals += String.format("Accelerometer values(%d)\n", accelerometerValues.length);
+                   for (int i=0;i<accelerometerValues.length;i++)
+                       accelVals += String.format("Accelerometer Values[%d]:%f\n", i, accelerometerValues[i]);
+               }
+               // Getting Values[] for Magnetometer, setting in TextView
+               if(magnetometerValues != null) {
+                   magVals += String.format("Magnetometer values(%d)\n", magnetometerValues.length);
+                   for (int i=0;i<magnetometerValues.length;i++)
+                       magVals+= String.format("Magnetometer Values[%d]:%f\n", i, magnetometerValues[i]);
+               }
+               view.setText(magVals);
+               view2.setText(accelVals);
+           }
         };
+        //Registering listeners to the Sensor Manager, sMan !
         sMan.registerListener(magnetListener, accelerometer, SensorManager.SENSOR_DELAY_NORMAL);
-
         sMan.registerListener(magnetListener, magnetField, SensorManager.SENSOR_DELAY_NORMAL);
 
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        
+
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
