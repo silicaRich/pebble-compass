@@ -13,19 +13,29 @@ import android.hardware.*;
 import android.content.Context;
 import android.widget.TextView;
 import android.widget.ImageView;
+import android.view.animation.Animation;
+import android.view.animation.RotateAnimation;
+
 
 public class MainActivity extends ActionBarActivity implements SensorEventListener {
+
+    float[] accelerometerValues;
+    float[] magnetometerValues;
+    ImageView compassImg;
+    // record the compass picture angle turned
+    private float currentDegree = 0f;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        ImageView compass = (ImageView) findViewById(R.id.compass_img);
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.container, new PlaceholderFragment())
                     .commit();
         }
+        // set up the compass's image
+        compassImg = (ImageView) findViewById(R.id.compass_img);
     }
 
     @Override
@@ -35,8 +45,6 @@ public class MainActivity extends ActionBarActivity implements SensorEventListen
     public void onSensorChanged(SensorEvent s){
     }
 
-    float[] accelerometerValues;
-    float[] magnetometerValues;
     @Override
     protected void onStart () {
        super.onStart();
@@ -53,13 +61,14 @@ public class MainActivity extends ActionBarActivity implements SensorEventListen
             public void onAccuracyChanged(Sensor sensor, int accuracy) {
                 // do things if you're interested in accuracy changes
             }
-           public void onSensorChanged(SensorEvent event) {
+            public void onSensorChanged(SensorEvent event) {
 
                //Setting up TextViews.
                String magVals = "";
                String accelVals = "";
                TextView view = (TextView)findViewById(R.id.magnetometerTextView);
                TextView view2 = (TextView)findViewById(R.id.accelerometerTextView);
+               TextView dirHeaded = (TextView)findViewById(R.id.dirTextView);
 
                if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER)
                    accelerometerValues = event.values;
@@ -78,9 +87,33 @@ public class MainActivity extends ActionBarActivity implements SensorEventListen
                    for (int i=0;i<magnetometerValues.length;i++)
                        magVals+= String.format("Magnetometer Values[%d]:%f\n", i, magnetometerValues[i]);
                }
-               view.setText(magVals);
-               view2.setText(accelVals);
-           }
+                view.setText(magVals);
+                view2.setText(accelVals);
+
+                //Set up an Animation for the compass picture! :-)
+                //get the angle around the z-axis rotated
+                float degree = Math.round(event.values[0]);
+
+                dirHeaded.setText("Heading: " + Float.toString(degree) + " degrees");
+
+                // create a rotation animation (reverse turn degree degrees)
+               RotateAnimation ra = new RotateAnimation(
+                        currentDegree,
+                        -degree,
+                        Animation.RELATIVE_TO_SELF, 0.5f,
+                        Animation.RELATIVE_TO_SELF,
+                        0.5f);
+
+                // how long the animation will take place
+                ra.setDuration(210);
+
+                // set the animation after the end of the reservation status
+                ra.setFillAfter(true);
+
+                // Start the animation
+                compassImg.startAnimation(ra);
+                currentDegree = -degree;
+            }
         };
         //Registering listeners to the Sensor Manager, sMan !
         sMan.registerListener(magnetListener, accelerometer, SensorManager.SENSOR_DELAY_NORMAL);
