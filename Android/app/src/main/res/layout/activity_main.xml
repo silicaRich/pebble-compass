@@ -1,0 +1,55 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/container"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.com.pebbleCompass.app.MainActivity"
+    tools:ignore="MergeRootFrame" >
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="100dip" >
+
+        <TextView
+            android:id="@+id/magnetometerTextView"
+            android:text="i love to derp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="100dip" >
+
+        <TextView
+            android:id="@+id/accelerometerTextView"
+            android:text="herp and purp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="200dip"
+        android:orientation="vertical"  >
+
+        <ImageView
+            android:id="@+id/compass_img"
+            android:src="@drawable/compass"
+            android:layout_width="wrap_content"
+            android:layout_height="175dip"
+            />
+        <TextView
+            android:id="@+id/dirTextView"
+            android:text="herp derp"
+            android:layout_width="match_parent"
+            android:layout_height="25dip" />
+
+    </LinearLayout>
+
+</LinearLayout>

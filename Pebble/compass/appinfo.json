@@ -1,0 +1,18 @@
+{
+  "uuid": "1309b19f-0a2c-4097-89f2-25a48263de32",
+  "shortName": "PebbleCompass",
+  "longName": "PebbleCompass",
+  "companyName": "Nicole Flokos (@silicarich)",
+  "versionCode": 1,
+  "versionLabel": "1.0.0",
+  "watchapp": {
+    "watchface": false
+  },
+"appKeys": {
+  "direction":  0,
+  "num_direction":  1
+},
+  "resources": {
+    "media": []
+  }
+}

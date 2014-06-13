@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merger>
+
+    <dataSet config="main" >
+        <source path="C:\Users\floko_000\AndroidStudioProjects\compass\libraries\PebbleKit\res" >
+            <file
+                name="main"
+                path="C:\Users\floko_000\AndroidStudioProjects\compass\libraries\PebbleKit\res\layout\main.xml"
+                qualifiers=""
+                type="layout" />
+            <file
+                path="C:\Users\floko_000\AndroidStudioProjects\compass\libraries\PebbleKit\res\values\strings.xml"
+                qualifiers="" >
+                <string name="app_name" >PEBBLE_SPORTS_SDK
+                </string>
+            </file>
+        </source>
+        <source path="C:\Users\floko_000\AndroidStudioProjects\compass\libraries\PebbleKit\build\res\rs\release" />
+        <source path="C:\Users\floko_000\AndroidStudioProjects\compass\libraries\PebbleKit\build\res\generated\release" />
+    </dataSet>
+    <dataSet config="release" >
+        <source path="C:\Users\floko_000\AndroidStudioProjects\compass\libraries\PebbleKit\src\release\res" />
+    </dataSet>
+
+</merger>

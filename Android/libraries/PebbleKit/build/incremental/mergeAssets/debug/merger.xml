@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merger>
+
+    <dataSet config="main" >
+        <source path="C:\Users\floko_000\AndroidStudioProjects\compass\libraries\PebbleKit\src\main\assets" />
+    </dataSet>
+    <dataSet config="debug" >
+        <source path="C:\Users\floko_000\AndroidStudioProjects\compass\libraries\PebbleKit\src\debug\assets" />
+    </dataSet>
+
+</merger>
