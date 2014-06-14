@@ -21,8 +21,7 @@ package pebblecompass.example.app;
         paint = new Paint();
         paint.setAntiAlias(true);
         paint.setStrokeWidth(2);
-        paint.setTextSize(30
-        );
+        paint.setTextSize(30);
         paint.setStyle(Paint.Style.STROKE);
         paint.setColor(Color.BLUE);
     }

@@ -9,7 +9,7 @@ import android.hardware.SensorManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.PowerManager;
-/*import android.util.Log; */
+//import android.util.Log;
 import android.view.Menu;
 import android.widget.Toast;
 
@@ -24,6 +24,12 @@ public class MainActivity extends Activity {
     private CompassView compassView;
     private Sensor sensor;
     private PowerManager.WakeLock wakeLock;
+
+    // Time interval in which data is sent
+    long intervalToSendDataToPebble = 750;
+    String charDir="";
+    float floatDir = 0.0f;
+
     public void onCreate(Bundle savedInstanceState) {
 
 
@@ -57,6 +63,17 @@ public class MainActivity extends Activity {
 
        testAsyncTask();
 
+        Thread t = new Thread(new Runnable() {
+            public void run() {
+                while(true) {
+                    try {
+                        android.os.SystemClock.sleep(intervalToSendDataToPebble);
+                        sendDataToPebble(charDir, floatDir);
+                    } catch(Exception e) { /*Log.i("Send Data Thread", "IDFK:" + e.toString());*/ }
+                }
+            }
+        });
+        t.start();
 
     }
 
@@ -66,7 +83,7 @@ public class MainActivity extends Activity {
         return false;
 
     }
-        public void sendDataToPebble(String charDir, float floatDir){
+    public void sendDataToPebble(String charDir, float floatDir){
 
             PebbleDictionary data = new PebbleDictionary();
             //data.addUint8(0, (byte) 42);
@@ -76,8 +93,6 @@ public class MainActivity extends Activity {
             /*data.addInt32(1, (int)position);*/
             UUID watchAppUUID = UUID.fromString("1309b19f-0a2c-4097-89f2-25a48263de32");
             PebbleKit.sendDataToPebble(getApplicationContext(), watchAppUUID, data);
-
-
     }
 
     private SensorEventListener mySensorEventListener = new SensorEventListener() {
@@ -94,8 +109,12 @@ public class MainActivity extends Activity {
             // angle between the magnetic north direction
             // 0=North, 90=East, 180=South, 270=West
             float azimuth = event.values[0];
-            float floatDir = azimuth;
-            String charDir="";
+            //using lerp function
+            //start + percent*(end - start)
+            //floatDir = azimuth;
+            //floatDir = start | azimuth = end
+            azimuth = floatDir + 0.75f*(azimuth - floatDir);
+
             compassView.updateData(azimuth);
             if(azimuth >=350 || azimuth <=10)
                 charDir="N";
@@ -115,8 +134,10 @@ public class MainActivity extends Activity {
                 charDir="NW";
          //   Log.i("direction:", charDir);
             compassView.charDir=charDir;
-            sendDataToPebble(charDir, floatDir);
+            //sendDataToPebble(charDir, floatDir);
 
+            //save azimuth
+            floatDir = azimuth;
         }
     };
 
@@ -132,13 +153,14 @@ public class MainActivity extends Activity {
             @Override
             protected Object doInBackground(Object[] params) {
 
-int d = 0;
-             while(d<1000){
-
-             //    Log.i("in thread derpin", "in thread derpin");
+             int d = 0;
+             boolean keepRunning = true;
+             while(keepRunning){
                  d++;
-                 android.os.SystemClock.sleep(1000);
+                 //if(d%1000 == 0)
+                 //    Log.i("in thread derpin", "in thread derpin");
 
+                 android.os.SystemClock.sleep(1000);
              }
                 return null;
             }
