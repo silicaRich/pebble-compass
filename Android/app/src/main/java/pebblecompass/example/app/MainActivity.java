@@ -9,7 +9,7 @@ import android.hardware.SensorManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.PowerManager;
-//import android.util.Log;
+import android.util.Log;
 import android.view.Menu;
 import android.widget.Toast;
 
@@ -23,7 +23,7 @@ public class MainActivity extends Activity {
     private static SensorManager sensorService;
     private CompassView compassView;
     private Sensor sensor;
-    private PowerManager.WakeLock wakeLock;
+  //  private PowerManager.WakeLock wakeLock;
 
     // Time interval in which data is sent
     long intervalToSendDataToPebble = 750;
@@ -37,12 +37,12 @@ public class MainActivity extends Activity {
           I'm using it here so that the pebble can be sent the cardinal direction even when the screen is off.
         */
         PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
-        wakeLock = pm.newWakeLock( PowerManager.PARTIAL_WAKE_LOCK, "Mywakelock");
-        //Log.i("","wake lock begin.");
-       // wakeLock.acquire();
+       /* wakeLock = pm.newWakeLock( PowerManager.PARTIAL_WAKE_LOCK, "Mywakelock");
+        Log.i("","wake lock begin.");
+        wakeLock.acquire();
         Toast acquire = Toast.makeText(getApplicationContext(), "haaayy",
                 Toast.LENGTH_SHORT);
-        acquire.show();
+        acquire.show(); */
         super.onCreate(savedInstanceState);
         compassView = new CompassView(this);
         setContentView(compassView);
@@ -79,7 +79,7 @@ public class MainActivity extends Activity {
 
     @Override
     public boolean onCreatePanelMenu(int featureId, Menu menu) {
-        Toast.makeText(this, "fdsafdfsdfsCalibrate your sensors by moving the phone in a figure-8 direction. Open your Pebble Watchapp, PebbleCompass, to transfer the cardinal direction to your Pebble.", Toast.LENGTH_LONG).show();
+        Toast.makeText(this, "Calibrate your sensors by moving the phone in a figure-8 direction. Open your Pebble Watchapp, PebbleCompass, to transfer the cardinal direction to your Pebble.", Toast.LENGTH_LONG).show();
         return false;
 
     }
@@ -158,7 +158,7 @@ public class MainActivity extends Activity {
              while(keepRunning){
                  d++;
                  //if(d%1000 == 0)
-                 //    Log.i("in thread derpin", "in thread derpin");
+                     //Log.i("in thread derpin", "in thread derpin");
 
                  android.os.SystemClock.sleep(1000);
              }
@@ -188,11 +188,11 @@ public class MainActivity extends Activity {
         if (sensor != null) {
             sensorService.unregisterListener(mySensorEventListener);
         }
-        //Log.i("","wake lock exit.");
-        wakeLock.release();
+        Log.i("","wake lock exit.");
+        /*wakeLock.release();
         Toast release = Toast.makeText(getApplicationContext(),
                 "Wake Lock OFF", Toast.LENGTH_SHORT);
-        release.show();
+        release.show();*/
     }
 
 }
